@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+<defs>
+  <radialGradient id="glow" cx="80%" cy="10%" r="70%">
+    <stop offset="0" stop-color="#4f8cff" stop-opacity="0.30"/>
+    <stop offset="1" stop-color="#0d1117" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="glow2" cx="5%" cy="100%" r="55%">
+    <stop offset="0" stop-color="#c084fc" stop-opacity="0.12"/>
+    <stop offset="1" stop-color="#0d1117" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="chip" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#1f2a5c"/>
+    <stop offset="1" stop-color="#0f1530"/>
+  </linearGradient>
+</defs>
+<rect width="1280" height="640" fill="#0d1117"/>
+<rect width="1280" height="640" fill="url(#glow)"/>
+<rect width="1280" height="640" fill="url(#glow2)"/>
+
+<g transform="translate(80 102)">
+  <rect width="32" height="32" rx="8" fill="url(#chip)" stroke="#4f8cff" stroke-opacity="0.55"/>
+  <path d="M5 17 H11 L14 9 L18.5 24 L21.5 15 H27" fill="none" stroke="#4f9bff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+
+<g font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif">
+  <text x="124" y="128" fill="#8b949e" font-size="26" font-family="ui-monospace, Consolas, Menlo, monospace">iddhi-sulakshana / MacStatus</text>
+  <text x="80" y="210" fill="#f0f6fc" font-size="64" font-weight="700">Your Mac's vitals,</text>
+  <text x="80" y="284" fill="#f0f6fc" font-size="64" font-weight="700">one glance <tspan fill="#4f9bff">from the menu bar.</tspan></text>
+  <text x="80" y="340" fill="#c9d1d9" font-size="28">A native Swift monitor for Apple Silicon. No root, no Xcode project.</text>
+</g>
+
+<g>
+  <rect x="80" y="380" width="1120" height="164" rx="12" fill="#161b22" stroke="#30363d"/>
+
+  <!-- the menu bar item -->
+  <rect x="104" y="404" width="314" height="116" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <g font-family="'SF Pro Display', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-weight="700" fill="#e6edf3">
+    <text x="128" y="452" font-size="36">22W</text>
+    <text x="128" y="494" font-size="36">63°</text>
+    <circle cx="262" cy="440" r="9" fill="#ff3b4e"/>
+    <circle cx="262" cy="482" r="9" fill="#3b82ff"/>
+    <text x="282" y="450" font-size="26">1.0 MB/s</text>
+    <text x="282" y="492" font-size="26">40 KB/s</text>
+  </g>
+
+  <!-- the cards from the popup -->
+  <g font-family="ui-monospace, Consolas, Menlo, monospace">
+    <g transform="translate(442 404)">
+      <rect width="138" height="116" rx="10" fill="#0d1117" stroke="#30363d"/>
+      <text x="16" y="30" font-size="18" font-weight="700" fill="#22d3ee">CPU</text>
+      <text x="16" y="74" font-size="36" font-weight="700" fill="#f0f6fc" font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif">27%</text>
+      <text x="16" y="100" font-size="16" fill="#8b949e">63°C</text>
+    </g>
+    <g transform="translate(592 404)">
+      <rect width="138" height="116" rx="10" fill="#0d1117" stroke="#30363d"/>
+      <text x="16" y="30" font-size="18" font-weight="700" fill="#c084fc">GPU</text>
+      <text x="16" y="74" font-size="36" font-weight="700" fill="#f0f6fc" font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif">23%</text>
+      <text x="16" y="100" font-size="16" fill="#8b949e">57°C</text>
+    </g>
+    <g transform="translate(742 404)">
+      <rect width="138" height="116" rx="10" fill="#0d1117" stroke="#30363d"/>
+      <text x="16" y="30" font-size="18" font-weight="700" fill="#34d399">MEMORY</text>
+      <text x="16" y="74" font-size="36" font-weight="700" fill="#f0f6fc" font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif">82%</text>
+      <text x="16" y="100" font-size="16" fill="#8b949e">13 / 16 GB</text>
+    </g>
+    <g transform="translate(892 404)">
+      <rect width="138" height="116" rx="10" fill="#0d1117" stroke="#30363d"/>
+      <text x="16" y="30" font-size="18" font-weight="700" fill="#4f9bff">ENERGY</text>
+      <text x="16" y="74" font-size="36" font-weight="700" fill="#f0f6fc" font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif">22.5W</text>
+      <text x="16" y="100" font-size="16" fill="#8b949e">plugged in</text>
+    </g>
+    <g transform="translate(1042 404)">
+      <rect width="138" height="116" rx="10" fill="#0d1117" stroke="#30363d"/>
+      <text x="16" y="30" font-size="18" font-weight="700" fill="#fb923c">DISKS</text>
+      <text x="16" y="74" font-size="36" font-weight="700" fill="#f0f6fc" font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif">46°C</text>
+      <text x="16" y="100" font-size="16" fill="#8b949e">2 connected</text>
+    </g>
+  </g>
+</g>
+
+<g font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif" font-size="22" fill="#8b949e">
+  <text x="80" y="592">power · temps · CPU · GPU · memory · disks · network</text>
+  <text x="1200" y="592" text-anchor="end">Swift · SwiftUI · SwiftPM</text>
+</g>
+</svg>
