@@ -109,3 +109,7 @@ Sources/MacStatus/
   Support/                          formatting and low-level system helpers
 Scripts/build-app.sh                builds and signs build/MacStatus.app
 ```
+
+## License
+
+MIT. See [LICENSE](LICENSE).
