@@ -38,6 +38,57 @@ struct MemoryStats: Equatable, Sendable {
 struct NetworkStats: Equatable, Sendable {
     var upBytesPerSecond = 0.0
     var downBytesPerSecond = 0.0
+    /// Bytes moved by the physical interfaces since they came up (normally since boot).
+    var totalSent: UInt64 = 0
+    var totalReceived: UInt64 = 0
+}
+
+enum ConnectionKind: Sendable { case wifi, ethernet, vpn, other, offline }
+
+struct WiFiInfo: Equatable, Sendable {
+    /// nil until MacStatus is allowed to use Location Services: macOS hides the network name otherwise.
+    var ssid: String?
+    var rssi = 0               // dBm
+    var noise = 0              // dBm
+    var transmitRate = 0.0     // Mbps
+    var channel: Int?
+    var band: String?          // "2.4 GHz", "5 GHz", "6 GHz"
+}
+
+struct PublicIPInfo: Equatable, Sendable {
+    var ipv4: String?
+    var ipv6: String?
+    var isp: String?
+    var asn: String?
+    var location: String?      // "City, Country"
+}
+
+enum PublicIPLookup: Equatable, Sendable {
+    case pending               // not looked up yet, or in flight
+    case found(PublicIPInfo)
+    case failed
+}
+
+/// The primary connection and its addresses. Only gathered while the popup is open.
+struct ConnectionInfo: Equatable, Sendable {
+    var kind: ConnectionKind = .offline
+    var interface: String?     // BSD name, "en0"
+    var adapterName: String?   // "Wi-Fi", "Thunderbolt Ethernet"
+    var localIPv4: String?
+    var prefixLength: Int?     // from the subnet mask: 24 for 255.255.255.0
+    var localIPv6: String?     // first global address, when the network has IPv6
+    var router: String?
+    var dns: [String] = []
+    var macAddress: String?
+    var linkSpeed: UInt64?     // bits per second, Ethernet only
+    var wifi: WiFiInfo?
+    var publicIP: PublicIPLookup = .pending
+
+    /// Changes whenever the Mac moves to another network, which is when the public address is looked up again.
+    var networkKey: String? {
+        guard kind != .offline, let interface else { return nil }
+        return [interface, localIPv4 ?? "", localIPv6 ?? "", router ?? ""].joined(separator: "|")
+    }
 }
 
 enum PowerState: Sendable {
@@ -88,6 +139,7 @@ struct SystemSnapshot: Equatable, Sendable {
     var gpu = GPUStats()
     var memory = MemoryStats()
     var network = NetworkStats()
+    var connection = ConnectionInfo()
     var energy = EnergyStats()
     var topCPU: [ProcessUsage] = []
     var topMemory: [ProcessUsage] = []
@@ -101,11 +153,15 @@ struct StatsHistory: Equatable, Sendable {
     var cpu: [Double] = []
     var gpu: [Double] = []
     var memory: [Double] = []
+    var upload: [Double] = []      // bytes per second
+    var download: [Double] = []
 
     mutating func record(_ snapshot: SystemSnapshot) {
         Self.append(&cpu, snapshot.cpu.total)
         Self.append(&gpu, snapshot.gpu.utilization)
         Self.append(&memory, snapshot.memory.usedFraction * 100)
+        Self.append(&upload, snapshot.network.upBytesPerSecond)
+        Self.append(&download, snapshot.network.downBytesPerSecond)
     }
 
     private static func append(_ array: inout [Double], _ value: Double) {

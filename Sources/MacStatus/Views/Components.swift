@@ -12,6 +12,7 @@ enum Theme {
     static let memory = Color(red: 0.20, green: 0.88, blue: 0.54)
     static let system = Color(red: 1.00, green: 0.72, blue: 0.28)
     static let disk = Color(red: 1.00, green: 0.62, blue: 0.30)
+    static let network = Color(red: 0.51, green: 0.56, blue: 1.00)
 
     // Network (also used for the menu bar dots): upload red, download blue.
     static let upload = Color(red: 1.00, green: 0.35, blue: 0.37)

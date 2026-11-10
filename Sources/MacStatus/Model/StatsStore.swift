@@ -8,6 +8,8 @@ final class Sampler: @unchecked Sendable {
     private let gpu = GPUMonitor()
     private let memory = MemoryMonitor()
     private let network = NetworkMonitor()
+    private let connection = ConnectionMonitor()
+    private let publicIP = PublicIPMonitor()
     private let power = PowerMonitor()
     private let disks = DiskMonitor()
     private let processes = ProcessMonitor()
@@ -16,8 +18,9 @@ final class Sampler: @unchecked Sendable {
 
     private var latest = SystemSnapshot()
 
-    /// `detailed` adds the work that only matters while the popup is open (process list).
-    func sample(detailed: Bool) -> SystemSnapshot {
+    /// `detailed` adds the work that only matters while the popup is open (process list, connection details).
+    /// `force` re-runs the public IP lookup, which is otherwise cached per network.
+    func sample(detailed: Bool, force: Bool = false) -> SystemSnapshot {
         var snapshot = latest
 
         snapshot.cpu.chipName = cpu.chipName
@@ -49,6 +52,10 @@ final class Sampler: @unchecked Sendable {
             let result = processes.sample()
             snapshot.topCPU = result.cpu
             snapshot.topMemory = result.memory
+
+            var details = connection.sample()
+            details.publicIP = publicIP.lookup(networkKey: details.networkKey, wantsIPv6: details.localIPv6 != nil, force: force)
+            snapshot.connection = details
         }
 
         latest = snapshot
@@ -64,6 +71,7 @@ final class StatsStore: ObservableObject {
     private let sampler = Sampler()
     private let queue = DispatchQueue(label: "app.macstatus.sampler", qos: .utility)
     private let detailed = OSAllocatedUnfairLock(initialState: false)
+    private let forceRequested = OSAllocatedUnfairLock(initialState: false)
     private var timer: DispatchSourceTimer?
 
     func start() {
@@ -81,12 +89,18 @@ final class StatsStore: ObservableObject {
         if value { queue.async { [weak self] in self?.tick() } }
     }
 
+    /// Samples right away and looks the public IP up again.
     func refresh() {
+        forceRequested.withLock { $0 = true }
         queue.async { [weak self] in self?.tick() }
     }
 
     nonisolated private func tick() {
-        let snapshot = sampler.sample(detailed: detailed.withLock { $0 })
+        let force = forceRequested.withLock { requested in
+            defer { requested = false }
+            return requested
+        }
+        let snapshot = sampler.sample(detailed: detailed.withLock { $0 }, force: force)
         Task { @MainActor [weak self] in self?.apply(snapshot) }
     }
 

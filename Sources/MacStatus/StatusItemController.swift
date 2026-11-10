@@ -1,6 +1,5 @@
 import AppKit
 import Combine
-import ServiceManagement
 import SwiftUI
 
 @MainActor
@@ -94,7 +93,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
 
         let login = NSMenuItem(title: "Launch at Login", action: #selector(toggleLaunchAtLogin), keyEquivalent: "")
         login.target = self
-        login.state = SMAppService.mainApp.status == .enabled ? .on : .off
+        login.state = LaunchAtLogin.isEnabled ? .on : .off
         menu.addItem(login)
 
         menu.addItem(.separator())
@@ -110,14 +109,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
 
     @objc private func refresh() { store.refresh() }
 
-    @objc private func toggleLaunchAtLogin() {
-        let service = SMAppService.mainApp
-        do {
-            if service.status == .enabled { try service.unregister() } else { try service.register() }
-        } catch {
-            NSLog("MacStatus: launch-at-login change failed: \(error.localizedDescription)")
-        }
-    }
+    @objc private func toggleLaunchAtLogin() { LaunchAtLogin.toggle() }
 
     @objc private func quit() { NSApp.terminate(nil) }
 }

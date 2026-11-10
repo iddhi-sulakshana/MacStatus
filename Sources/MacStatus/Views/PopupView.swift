@@ -24,6 +24,8 @@ struct PopupContent: View {
             MemoryCard(memory: snapshot.memory)
             ProcessesCard(topCPU: snapshot.topCPU, topMemory: snapshot.topMemory)
             EnergyCard(energy: snapshot.energy)
+            NetworkCard(network: snapshot.network, connection: snapshot.connection,
+                        uploadHistory: history.upload, downloadHistory: history.download)
             DisksCard(disks: snapshot.disks)
         }
         .padding(14)

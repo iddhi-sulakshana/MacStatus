@@ -6,6 +6,8 @@
     <string>en</string>
     <key>CFBundleExecutable</key>
     <string>MacStatus</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>CFBundleIdentifier</key>
     <string>dev.iddhi.MacStatus</string>
     <key>CFBundleInfoDictionaryVersion</key>
@@ -24,5 +26,9 @@
     <true/>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>NSLocationUsageDescription</key>
+    <string>macOS only shows the Wi-Fi network name to apps that can use Location Services. MacStatus never reads your location.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>macOS only shows the Wi-Fi network name to apps that can use Location Services. MacStatus never reads your location.</string>
 </dict>
 </plist>

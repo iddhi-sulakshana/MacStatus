@@ -14,6 +14,28 @@ enum Fmt {
         return value >= 10 ? String(format: "%.0f %@", value, units[unit]) : String(format: "%.1f %@", value, units[unit])
     }
 
+    /// Amounts of traffic, decimal: "340 MB", "12.3 GB".
+    static func dataSize(_ bytes: UInt64) -> String {
+        let units = ["B", "KB", "MB", "GB", "TB"]
+        var value = Double(bytes)
+        var unit = 0
+        while value >= 1000, unit < units.count - 1 {
+            value /= 1000
+            unit += 1
+        }
+        if unit == 0 { return "\(bytes) B" }
+        return value >= 100 ? String(format: "%.0f %@", value, units[unit]) : String(format: "%.1f %@", value, units[unit])
+    }
+
+    /// Link rates: "292 Mbps", "1 Gbps", "2.5 Gbps".
+    static func bitRate(_ bitsPerSecond: Double) -> String {
+        if bitsPerSecond >= 1_000_000_000 {
+            let gbps = bitsPerSecond / 1_000_000_000
+            return gbps.rounded() == gbps ? String(format: "%.0f Gbps", gbps) : String(format: "%.1f Gbps", gbps)
+        }
+        return String(format: "%.0f Mbps", bitsPerSecond / 1_000_000)
+    }
+
     /// Memory sizes (binary, like Activity Monitor): "7.32 GB", "340 MB".
     static func memory(_ bytes: UInt64) -> String {
         let gib = Double(bytes) / 1_073_741_824

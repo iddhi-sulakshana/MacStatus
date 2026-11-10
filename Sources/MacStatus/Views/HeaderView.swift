@@ -9,11 +9,7 @@ struct HeaderView: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            Image(systemName: "laptopcomputer")
-                .font(.system(size: 16, weight: .medium))
-                .foregroundStyle(Theme.cpu)
-                .frame(width: 38, height: 38)
-                .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Theme.cpu.opacity(0.14)))
+            AppLogo(size: 38)
 
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 8) {

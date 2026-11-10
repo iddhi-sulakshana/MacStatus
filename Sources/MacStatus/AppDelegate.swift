@@ -13,9 +13,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             PreviewRenderer.run(store: store, outputDirectory: arguments[flag + 1])
             return
         }
+        // `MacStatus --icon <dir.iconset>` writes the app icon's PNGs and exits (the build script turns them into AppIcon.icns).
+        if let flag = arguments.firstIndex(of: "--icon"), arguments.indices.contains(flag + 1) {
+            IconRenderer.run(outputDirectory: arguments[flag + 1])
+            return
+        }
 
         statusController = StatusItemController(store: store)
         store.start()
+        LaunchAtLogin.applyDefault()
 
         // `MacStatus --show-popup` opens the popup right after launch (handy for screenshots and debugging).
         if arguments.contains("--show-popup") {

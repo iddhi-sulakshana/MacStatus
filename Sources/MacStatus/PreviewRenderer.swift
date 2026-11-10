@@ -13,7 +13,7 @@ enum PreviewRenderer {
             let directory = URL(fileURLWithPath: outputDirectory, isDirectory: true)
             try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
-            let popup = PopupContent(snapshot: store.snapshot, history: store.history)
+            let popup = PopupContent(snapshot: withSampleAddresses(store.snapshot), history: store.history)
                 .background(Theme.background)
                 .environment(\.colorScheme, .dark)
             let renderer = ImageRenderer(content: popup)
@@ -25,6 +25,25 @@ enum PreviewRenderer {
             print("snapshot: \(store.snapshot)")
             NSApp.terminate(nil)
         }
+    }
+
+    /// The screenshots go into the public README, so the real addresses, ISP, location and Wi-Fi name are swapped
+    /// for documentation values (RFC 5737 / RFC 3849). The connection type and live readings stay real.
+    private static func withSampleAddresses(_ snapshot: SystemSnapshot) -> SystemSnapshot {
+        var snapshot = snapshot
+        var connection = snapshot.connection
+        if connection.localIPv4 != nil { connection.localIPv4 = "192.168.1.24" }
+        if connection.localIPv6 != nil { connection.localIPv6 = "2001:db8::24" }
+        if connection.router != nil { connection.router = "192.168.1.1" }
+        connection.dns = connection.dns.isEmpty ? [] : ["192.168.1.1"]
+        if connection.macAddress != nil { connection.macAddress = "a2:4c:19:7e:30:5b" }
+        if connection.wifi != nil { connection.wifi?.ssid = "Home Wi-Fi" }
+        if case .found(let info) = connection.publicIP {
+            connection.publicIP = .found(PublicIPInfo(ipv4: "203.0.113.42", ipv6: info.ipv6 == nil ? nil : "2001:db8::42",
+                                                      isp: "Example Broadband", asn: "AS64500", location: "Example City"))
+        }
+        snapshot.connection = connection
+        return snapshot
     }
 
     /// The energy card in all three power states with synthetic data, since a desk Mac can't be unplugged on demand.
